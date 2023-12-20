@@ -1,0 +1,35 @@
+.board-square {
+    width: calc(100vh / 9);
+    height: calc(100vh / 9);
+    cursor: pointer;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+}
+
+.light:hover {
+    background-color: #d8c3a3;
+}
+
+.dark:hover {
+    background-color: #bc9473;
+}
+
+.centered-image {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: auto;
+}
+
+.light {
+    background-color: #f0d9b5; /* Light color */
+}
+
+.dark {
+    background-color: #b58863; /* Dark color */
+}
+
+.highlight {
+    background-color: #46ff25;
+}
