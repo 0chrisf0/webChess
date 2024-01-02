@@ -1,11 +1,8 @@
 package com.web.chess;
 
 import java.awt.Color;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.HashSet;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class Piece extends JButton {

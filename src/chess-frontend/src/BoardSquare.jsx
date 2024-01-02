@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import './BoardSquare.css'
+import './styles/BoardSquare.css'
 
 
 function BoardSquare ({props}) {

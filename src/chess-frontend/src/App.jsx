@@ -16,7 +16,8 @@ const App = () => {
         ["Empty","Empty","Empty","Empty","Empty","Empty","Empty","Empty"],
         ["Empty","Empty","Empty","Empty","Empty","Empty","Empty","Empty"]]);
 
-    const [highlights,setHighlights] = useState ([[false,false,false,false,false,false,false,false],
+    const [highlights,setHighlights] = useState ([
+        [false,false,false,false,false,false,false,false],
         [false,false,false,false,false,false,false,false],
         [false,false,false,false,false,false,false,false],
         [false,false,false,false,false,false,false,false],

@@ -1,6 +1,6 @@
 import React from 'react';
 import BoardSquare from './BoardSquare';
-import './Chessboard.css'
+import './styles/Chessboard.css'
 
 const Chessboard = ({props}) => {
     const {boardstate, highlights, handleClick} = props;

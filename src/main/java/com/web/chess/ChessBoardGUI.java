@@ -1,9 +1,7 @@
 package com.web.chess;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.HashSet;
-import javax.swing.*;
-import javax.swing.border.*;
+
 
 
 public class ChessBoardGUI {
@@ -17,7 +15,8 @@ public class ChessBoardGUI {
     /**
      * The current gamestate, a value from enum gamestate.
      */
-    gamestate currentGamestate = gamestate.INACTIVE;
+    public gamestate currentGamestate = gamestate.INACTIVE;
+
     public enum gamestate {
         INACTIVE,
         WHITE,
@@ -48,13 +47,12 @@ public class ChessBoardGUI {
     /**
      * Constructor for ChessBoardGUI. Makes use of initializeGui().
      */
-    ChessBoardGUI() {
+    public ChessBoardGUI() {
         initializeGui();
     }
 
     private void initializeGui() {
         // create the chess board squares
-        Insets buttonMargin = new Insets(0,0,0,0);
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 chessBoardSquares[row][col] = new Piece("Empty", false);
@@ -223,7 +221,7 @@ public class ChessBoardGUI {
         }
         if(origin.getType().equalsIgnoreCase("P")) {
             // Special things need to be done for pawns:
-             Promotion:
+            // Promotion:
             if (currentGamestate == gamestate.WHITE_SELECT && destRow == 0) {
                 origin.reinitialize(new Piece("Q", true));
             } else if (currentGamestate == gamestate.BLACK_SELECT && destRow == 7) {

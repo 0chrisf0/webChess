@@ -1,7 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Chessboard from './Chessboard.jsx'
-import Menubar from './Menubar.jsx'
 import App from './App.jsx'
 
 

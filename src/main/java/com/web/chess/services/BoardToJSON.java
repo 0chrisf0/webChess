@@ -1,6 +1,10 @@
-package com.web.chess;
+package com.web.chess.services;
 
 import java.awt.Color;
+
+import com.web.chess.ChessBoardGUI;
+import com.web.chess.Piece;
+import com.web.chess.models.ClickResponse;
 
 public class BoardToJSON {
 
@@ -26,13 +30,6 @@ public class BoardToJSON {
         response.highlights = highlights;
         response.gamestate = state.toString();
         return response;
-    }
-
-    // ClickResponse class representing the response structure
-    public static class ClickResponse {
-        public String[][] boardstate;
-        public Boolean[][] highlights;
-        public String gamestate;
     }
 
 }
