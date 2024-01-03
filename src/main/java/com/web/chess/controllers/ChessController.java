@@ -1,6 +1,7 @@
 package com.web.chess.controllers;
 import com.web.chess.ChessBoardGUI;
 import com.web.chess.models.ClickResponse;
+import com.web.chess.models.ConnectRequest;
 import com.web.chess.services.BoardToJSON;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -62,5 +63,8 @@ public class ChessController {
 
 	}
 
+	@PostMapping("/api/connect")
+	public void connect(@RequestBody ConnectRequest request) {
 
+	}
 }
