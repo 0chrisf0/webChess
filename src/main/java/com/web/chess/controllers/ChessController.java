@@ -3,63 +3,62 @@ import com.web.chess.ChessBoardGUI;
 import com.web.chess.models.ClickResponse;
 import com.web.chess.models.ConnectRequest;
 import com.web.chess.services.BoardToJSON;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.web.chess.models.Player;
 
 @RestController
+@RequestMapping("/api")
 public class ChessController {
-	// SERVER STATE
 	ChessBoardGUI gui = new ChessBoardGUI();
 
-	@GetMapping("/api/FEN")
-	public String[][] fen(String inputFEN) {
+	private final SimpMessagingTemplate messagingTemplate;
+
+	public ChessController(SimpMessagingTemplate messagingTemplate) {
+		this.messagingTemplate = messagingTemplate;
+	}
+
+
+	@GetMapping("/FEN")
+	public String fen(String inputFEN) {
 		// Call server-side functions for the effects and send back the modified state.
 		try {
 			gui.setupBoard(inputFEN);
 		} catch (Exception e) {
-			return new String[][]{
-					{"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-					{"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-					{"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-					{"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-					{"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-					{"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-					{"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-					{"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"}};
+			// TODO add websocket response?
 		}
-		return BoardToJSON.boardToImagePaths(gui.chessBoardSquares);
+		messagingTemplate.convertAndSend("/topic/game", BoardToJSON.clickToJSON(gui.chessBoardSquares, gui.currentGamestate) );
+		return "SUCCESS";
 
 	}
 
-	@GetMapping("/api/start")
+	@GetMapping("/start")
 	public String start() {
 		gui.startGame();
-		return gui.currentGamestate.toString();
+		messagingTemplate.convertAndSend("/topic/game", BoardToJSON.clickToJSON(gui.chessBoardSquares, gui.currentGamestate) );
+		return "SUCCESS";
 	}
 
-	@GetMapping("/api/click")
-	public ClickResponse click(@RequestParam String pos) {
+	@GetMapping("/click")
+	public String click(@RequestParam String pos) {
 		int row = Character.getNumericValue(pos.charAt(0));
 		int col = Character.getNumericValue(pos.charAt(1));
 		gui.buttonPress(row, col);
-		return BoardToJSON.clickToJSON(gui.chessBoardSquares, gui.currentGamestate);
+		messagingTemplate.convertAndSend("/topic/game", BoardToJSON.clickToJSON(gui.chessBoardSquares, gui.currentGamestate) );
+		return "SUCCESS";
 	}
 
-	@PostMapping("/api/create")
+	@PostMapping("/create")
 	public void create(@RequestBody Player player) {
 
 	}
 
-	@PostMapping("/api/connect")
+	@PostMapping("/connect")
 	public void connect(@RequestBody ConnectRequest request) {
 
 	}

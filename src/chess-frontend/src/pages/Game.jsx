@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Chessboard from '../components/Chessboard.jsx'
 import Menubar from '../components/Menubar.jsx'
 
+import { Client } from '@stomp/stompjs';
 
-const Game = () => {
+
+const Game = ({props}) => {
+    const {endGame, stompClient} = props;
+
+
+
     // Set initial boardstate
     const [boardstate, setBoardstate] = useState([
         ["Empty","Empty","Empty","Empty","Empty","Empty","Empty","Empty"],
@@ -27,13 +33,20 @@ const Game = () => {
         [false,false,false,false,false,false,false,false]])
 
     const [gamestate,setGamestate] = useState("Inactive")
+    
 
 
     const handleStartGameClick = async () => {
+        stompClient.subscribe("/topic/game", function (response) {
+            let data = JSON.parse(response.body);
+            setBoardstate(data.boardstate)
+            setHighlights(data.highlights)
+            setGamestate(data.gamestate)
+        })
         try {
             // Make an HTTP GET request to the server
             const response = await axios.get(`/api/start`)
-            setGamestate(response.data);
+
         } catch (error) {
             console.error('Error fetching data:', error.message)
         }
@@ -46,7 +59,6 @@ const Game = () => {
             try {
                 // Make an HTTP GET request to the server
                 const response = await axios.get(`/api/FEN?inputFEN=${encodeURIComponent(inputFEN)}`)
-                setBoardstate(response.data);
 
 
             } catch (error) {
@@ -62,23 +74,20 @@ const Game = () => {
             const position = row.toString() + col.toString()
             const response = await axios.get(`/api/click?pos=${position}`)
 
-            // What I need to be returned: the boardstate + What squares should be highlighted
-            setBoardstate(response.data.boardstate)
-            setHighlights(response.data.highlights)
-            setGamestate(response.data.gamestate)
 
         } catch (error) {
             console.error('Error fetching data:', error.message)
         }
     }
 
-    const props = {gamestate, newgame: handleNewGameClick, startgame:handleStartGameClick}
+
+    const menuProps = {gamestate, newgame: handleNewGameClick, startgame:handleStartGameClick}
     const chessboard = {handleClick, boardstate, highlights}
 
     return (
         <div>
             {/*Pass in on-click action functions*/}
-            <Menubar props={props} />
+            <Menubar props={menuProps} />
             <Chessboard props={chessboard} />
         </div>
     )
