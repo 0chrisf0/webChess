@@ -5,6 +5,9 @@ import com.web.chess.models.ConnectRequest;
 import com.web.chess.services.BoardToJSON;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.chess.models.Player;
 
 @SpringBootApplication
-@RestController
+@Controller
 public class ChessController {
 	// SERVER STATE
 	ChessBoardGUI gui = new ChessBoardGUI();
@@ -24,8 +27,10 @@ public class ChessController {
 	}
 
 
-	@GetMapping("/api/FEN")
-	public String[][] fen(@RequestParam String inputFEN) {
+//	@GetMapping("/api/FEN")
+	@MessageMapping("/FEN")
+	@SendTo("/topic/game")
+	public String[][] fen(String inputFEN) {
 		// Call server-side functions for the effects and send back the modified state.
 		try {
 			gui.setupBoard(inputFEN);
