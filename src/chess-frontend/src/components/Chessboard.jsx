@@ -1,12 +1,12 @@
-import React from 'react';
-import BoardSquare from './BoardSquare';
-import './styles/Chessboard.css'
+import React from 'react'
+import BoardSquare from './BoardSquare'
+import './../styles/Chessboard.css'
 
 const Chessboard = ({props}) => {
-    const {boardstate, highlights, handleClick} = props;
+    const {boardstate, highlights, handleClick} = props
 
     const squares = () => {
-        const squares = [];
+        const squares = []
 
         for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 8; col++) {
@@ -17,19 +17,19 @@ const Chessboard = ({props}) => {
                     <div className="grid-item" key={`${row}-${col}`}>
                         <BoardSquare props={props} />
                     </div>
-                );
+                )
 
             }
         }
 
-        return squares;
-    };
+        return squares
+    }
 
     return (
         <div className="grid-container">
             {squares()}
         </div>
-    );
-};
+    )
+}
 
-export default Chessboard;
+export default Chessboard

@@ -1,4 +1,4 @@
-import './styles/BoardSquare.css'
+import './../styles/BoardSquare.css'
 
 
 function BoardSquare ({props}) {

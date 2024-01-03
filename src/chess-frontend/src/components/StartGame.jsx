@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/Menubar.css'
+import './../styles/Menubar.css'
 
 const StartGame = ({onClick}) => {
     return (

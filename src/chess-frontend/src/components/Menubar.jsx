@@ -1,5 +1,5 @@
-import React from 'react';
-import NewGame from './NewGame.jsx';
+import React from 'react'
+import NewGame from './NewGame.jsx'
 import StartGame from './StartGame.jsx'
 
 const Menubar = ({props}) => {
@@ -13,4 +13,4 @@ const Menubar = ({props}) => {
     );
 };
 
-export default Menubar;
+export default Menubar

@@ -1,6 +1,11 @@
-import './styles/Menu.css';
+import './../styles/Menu.css'
 
-function Menu() {
+function Menu({ startGame }) {
+
+    const handleStartGame = () => {
+        startGame()
+    }
+
     return (
         <>
             <div className="PlayerNameDiv">
@@ -8,16 +13,16 @@ function Menu() {
                 <input type="text" placeholder="Name"></input>
             </div>
 
-            <div className="CreateGameDiv">
+            <div className="CreateGameDiv" onClick={handleStartGame}>
                 <input type="submit" value={"Create Game"}></input>
             </div>
 
-            <div className="ConnectGameDiv">
+            <div className="ConnectGameDiv" onClick={handleStartGame}>
                 <input type="text" placeholder="GameID"></input>
                 <input type="submit" value={"Connect to Game"}></input>
             </div>
         </>
-    );
+    )
 }
 
-export default Menu;
+export default Menu
