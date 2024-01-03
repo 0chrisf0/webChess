@@ -1,0 +1,16 @@
+.PlayerNameDiv{
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.CreateGameDiv{
+    position: absolute;
+    right: 75%;
+}
+
+.ConnectGameDiv{
+    position: absolute;
+    left: 75%;
+}
