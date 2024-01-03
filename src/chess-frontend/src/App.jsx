@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Game from './pages/Game.jsx'
 import Menu from './pages/Menu.jsx'
 
+
 const App = () => {
   const [gameStart, setGameStart] = useState(false)
   const startGame = () => {

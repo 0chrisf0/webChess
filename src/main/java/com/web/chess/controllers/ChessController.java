@@ -15,21 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.web.chess.models.Player;
 
-@SpringBootApplication
-@Controller
+@RestController
 public class ChessController {
 	// SERVER STATE
 	ChessBoardGUI gui = new ChessBoardGUI();
 
-
-	public static void main(String[] args) {
-		SpringApplication.run(ChessController.class, args);
-	}
-
-
-//	@GetMapping("/api/FEN")
-	@MessageMapping("/FEN")
-	@SendTo("/topic/game")
+	@GetMapping("/api/FEN")
 	public String[][] fen(String inputFEN) {
 		// Call server-side functions for the effects and send back the modified state.
 		try {
