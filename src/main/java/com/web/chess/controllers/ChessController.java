@@ -1,6 +1,5 @@
 package com.web.chess.controllers;
 import com.web.chess.ChessBoardGUI;
-import com.web.chess.models.ClickResponse;
 import com.web.chess.models.ConnectRequest;
 import com.web.chess.services.BoardToJSON;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

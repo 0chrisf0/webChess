@@ -9,7 +9,15 @@ import { Client } from '@stomp/stompjs';
 const Game = ({props}) => {
     const {endGame, stompClient} = props;
 
-
+    // Wait for 3 seconds
+    setTimeout(function() {
+        stompClient.subscribe("/topic/game", function (response) {
+            let data = JSON.parse(response.body);
+            setBoardstate(data.boardstate)
+            setHighlights(data.highlights)
+            setGamestate(data.gamestate)
+        })
+    }, 2000);
 
     // Set initial boardstate
     const [boardstate, setBoardstate] = useState([
@@ -33,16 +41,10 @@ const Game = ({props}) => {
         [false,false,false,false,false,false,false,false]])
 
     const [gamestate,setGamestate] = useState("Inactive")
-    
+
 
 
     const handleStartGameClick = async () => {
-        stompClient.subscribe("/topic/game", function (response) {
-            let data = JSON.parse(response.body);
-            setBoardstate(data.boardstate)
-            setHighlights(data.highlights)
-            setGamestate(data.gamestate)
-        })
         try {
             // Make an HTTP GET request to the server
             const response = await axios.get(`/api/start`)
