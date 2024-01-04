@@ -2,14 +2,12 @@ package com.web.chess.controllers;
 import com.web.chess.ChessBoardGUI;
 import com.web.chess.models.ConnectRequest;
 import com.web.chess.services.BoardToJSON;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.web.chess.models.Player;
+import com.web.chess.services.GameService;
 
 @RestController
 @RequestMapping("/api")
@@ -17,9 +15,11 @@ public class ChessController {
 	ChessBoardGUI gui = new ChessBoardGUI();
 
 	private final SimpMessagingTemplate messagingTemplate;
+	private final GameService gameService;
 
-	public ChessController(SimpMessagingTemplate messagingTemplate) {
+	public ChessController(GameService gameService, SimpMessagingTemplate messagingTemplate) {
 		this.messagingTemplate = messagingTemplate;
+		this.gameService = gameService;
 	}
 
 
@@ -53,8 +53,8 @@ public class ChessController {
 	}
 
 	@PostMapping("/create")
-	public void create(@RequestBody Player player) {
-
+	public int create(@RequestBody Player player) {
+		return gameService.createGame();
 	}
 
 	@PostMapping("/connect")
