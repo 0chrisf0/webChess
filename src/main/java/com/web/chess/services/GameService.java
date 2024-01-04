@@ -24,5 +24,7 @@ public class GameService {
         return counter;
     }
 
-    public void connect () {}
+    public void connect () {
+
+    }
 }

@@ -58,7 +58,7 @@ public class ChessController {
 	}
 
 	@PostMapping("/connect")
-	public void connect(@RequestBody ConnectRequest request) {
+	public void connect(@RequestParam int gameId) {
 
 	}
 }
