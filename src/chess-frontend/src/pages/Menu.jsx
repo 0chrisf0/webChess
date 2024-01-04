@@ -2,12 +2,7 @@ import './../styles/Menu.css'
 import { Client } from '@stomp/stompjs';
 
 function Menu({ props }) {
-    const {startGame, stompClient} = props;
-
-    const handleStartGame = () => {
-        stompClient.activate();
-        startGame();
-    }
+    const {startGame, handleCreateGame, stompClient} = props;
 
     return (
         <>
@@ -16,7 +11,7 @@ function Menu({ props }) {
                 <input type="text" placeholder="Name"></input>
             </div>
 
-            <div className="CreateGameDiv" onClick={handleStartGame}>
+            <div className="CreateGameDiv" onClick={handleCreateGame}>
                 <input type="submit" value={"Create Game"}></input>
             </div>
 

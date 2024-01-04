@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Game from './pages/Game.jsx'
 import Menu from './pages/Menu.jsx'
 import {Client} from "@stomp/stompjs";
+import axios from "axios";
 
 
 const stompClient = new Client({
@@ -28,6 +29,8 @@ stompClient.onWebSocketError = (error) => {
 
 const App = () => {
   const [gameStart, setGameStart] = useState(false)
+  const [gameID, setID] = useState('')
+
   const startGame = () => {
     setGameStart(true)
   }
@@ -35,8 +38,18 @@ const App = () => {
     setGameStart(false)
   }
 
+  const handleCreateGame = async () => {
+    stompClient.activate();
+    const response = await axios.post(`/api/create`, {
+    name: 'PLACEHOLDER',
+    id: 'PLACEHOLDER',
+    color: -1});
+    setID(response.data)
+    startGame();
+  }
+
   const gameProps={endGame,stompClient}
-  const menuProps={startGame,stompClient}
+  const menuProps={startGame, handleCreateGame, stompClient}
 
   return (
     <>
