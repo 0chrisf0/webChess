@@ -7,17 +7,18 @@ import { Client } from '@stomp/stompjs';
 
 
 const Game = ({props}) => {
-    const {endGame, stompClient} = props;
+    const {endGame, gameID, stompClient} = props;
 
     // Wait for 3 seconds
     setTimeout(function() {
+        console.log(gameID);
         stompClient.subscribe("/topic/game", function (response) {
             let data = JSON.parse(response.body);
             setBoardstate(data.boardstate)
             setHighlights(data.highlights)
             setGamestate(data.gamestate)
         })
-    }, 2000);
+    }, 1000);
 
     // Set initial boardstate
     const [boardstate, setBoardstate] = useState([

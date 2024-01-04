@@ -48,7 +48,7 @@ const App = () => {
     startGame();
   }
 
-  const gameProps={endGame,stompClient}
+  const gameProps={endGame,gameID, stompClient}
   const menuProps={startGame, handleCreateGame, stompClient}
 
   return (

@@ -15,7 +15,7 @@ function Menu({ props }) {
                 <input type="submit" value={"Create Game"}></input>
             </div>
 
-            <div className="ConnectGameDiv" onClick={handleStartGame}>
+            <div className="ConnectGameDiv" onClick={handleCreateGame}>
                 <input type="text" placeholder="GameID"></input>
                 <input type="submit" value={"Connect to Game"}></input>
             </div>
