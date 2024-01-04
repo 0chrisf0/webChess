@@ -1,8 +1,15 @@
 import './../styles/Menu.css'
 import { Client } from '@stomp/stompjs';
+import {useState} from "react";
 
 function Menu({ props }) {
-    const {startGame, handleCreateGame, stompClient} = props;
+    const {startGame, handleCreateGame, handleConnectGame, stompClient} = props;
+    const [inputId, setInputId] = useState('');
+
+
+    const handleInputIdChange = (event) => {
+        setInputId(event.target.value);
+    };
 
     return (
         <>
@@ -15,9 +22,14 @@ function Menu({ props }) {
                 <input type="submit" value={"Create Game"}></input>
             </div>
 
-            <div className="ConnectGameDiv" onClick={handleCreateGame}>
-                <input type="text" placeholder="GameID"></input>
-                <input type="submit" value={"Connect to Game"}></input>
+            <div className="ConnectGameDiv">
+                <input
+                    type="text"
+                    placeholder="GameID"
+                    value={inputId}
+                    onChange={handleInputIdChange}
+                />
+                <button onClick={() => handleConnectGame(inputId)}>Connect</button>
             </div>
         </>
     )

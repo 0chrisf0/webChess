@@ -48,8 +48,13 @@ const App = () => {
     startGame();
   }
 
+  const handleConnectGame = async (inputID) => {
+    console.log("CONNECTING: " + inputID)
+
+  }
+
   const gameProps={endGame,gameID, stompClient}
-  const menuProps={startGame, handleCreateGame, stompClient}
+  const menuProps={startGame, handleCreateGame, handleConnectGame, stompClient}
 
   return (
     <>
