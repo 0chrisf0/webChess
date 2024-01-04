@@ -58,7 +58,13 @@ public class ChessController {
 	}
 
 	@PostMapping("/connect")
-	public void connect(@RequestParam int gameId) {
+	public ResponseEntity<String> connect(@RequestParam int gameId) {
+		try {
+			gameService.connect(gameId);
+		} catch (Exception exception) {
+			return new ResponseEntity<String>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 
+		return new ResponseEntity<String>("Succesful connection", HttpStatus.OK);
 	}
 }
