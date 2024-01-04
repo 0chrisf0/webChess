@@ -9,8 +9,7 @@ import { Client } from '@stomp/stompjs';
 const Game = ({props}) => {
     const {endGame, gameID, stompClient} = props;
 
-    // Wait for 3 seconds
-    setTimeout(function() {
+    useEffect (() => {setTimeout(function() {
         console.log(gameID);
         stompClient.subscribe("/topic/game", function (response) {
             let data = JSON.parse(response.body);
@@ -18,7 +17,8 @@ const Game = ({props}) => {
             setHighlights(data.highlights)
             setGamestate(data.gamestate)
         })
-    }, 1000);
+    }, 1000)}, [])
+
 
     // Set initial boardstate
     const [boardstate, setBoardstate] = useState([
