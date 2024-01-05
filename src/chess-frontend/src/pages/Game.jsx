@@ -9,17 +9,6 @@ import { Client } from '@stomp/stompjs';
 const Game = ({props}) => {
     const {endGame, stompClient} = props;
 
-    useEffect (() => {setTimeout(function() {
-        console.log("SUBSCRIBING: /topic/game/" + stompClient.gameId);
-
-        stompClient.subscribe("/topic/game/" + stompClient.gameId, function (response) {
-            let data = JSON.parse(response.body);
-            setBoardstate(data.boardstate)
-            setHighlights(data.highlights)
-            setGamestate(data.gamestate)
-        })
-
-    }, 1000)}, [])
 
 
     // Set initial boardstate
@@ -44,6 +33,36 @@ const Game = ({props}) => {
         [false,false,false,false,false,false,false,false]])
 
     const [gamestate,setGamestate] = useState("Inactive")
+
+    useEffect (() => {setTimeout(function() {
+        console.log("SUBSCRIBING: /topic/game/" + stompClient.gameId);
+
+        let color = stompClient.playerColor;
+        if (color === -1) {
+            setBoardstate(stompClient.initialState.boardstate)
+            setHighlights(stompClient.initialState.highlights)
+            setGamestate(stompClient.initialState.gamestate)
+        } else {
+            setBoardstate(stompClient.initialState.boardstate.reverse())
+            setHighlights(stompClient.initialState.highlights.reverse())
+            setGamestate(stompClient.initialState.gamestate)
+        }
+
+
+        stompClient.subscribe("/topic/game/" + stompClient.gameId, function (response) {
+            let data = JSON.parse(response.body);
+            if (color === -1) {
+                setBoardstate(data.boardstate)
+                setHighlights(data.highlights)
+                setGamestate(data.gamestate)
+            } else {
+                setBoardstate(data.boardstate.reverse())
+                setHighlights(data.highlights.reverse())
+                setGamestate(data.gamestate)
+            }
+        })
+
+    }, 1000)}, [])
 
 
 
@@ -83,8 +102,9 @@ const Game = ({props}) => {
             // What the server needs: the position of the click
             const position = row.toString() + col.toString()
             await axios.post(`/api/click`, {
-                data : position,
-                gameId : stompClient.gameId
+                position,
+                gameId : stompClient.gameId,
+                color : stompClient.playerColor
             })
 
 

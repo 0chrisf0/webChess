@@ -5,20 +5,30 @@ import {useState} from "react";
 function Menu({ props }) {
     const {startGame, handleCreateGame, handleConnectGame, stompClient} = props;
     const [inputId, setInputId] = useState('');
+    const [name, setName] = useState('');
 
 
     const handleInputIdChange = (event) => {
         setInputId(event.target.value);
     };
 
+    const handleNameChange = (event) => {
+        setName(event.target.value);
+    };
+
     return (
         <>
             <div className="PlayerNameDiv">
                 <h1>Web Chess</h1>
-                <input type="text" placeholder="Name"></input>
+                <input
+                    type="text"
+                    placeholder="Name"
+                    value={name}
+                    onChange={handleNameChange}
+                />
             </div>
 
-            <div className="CreateGameDiv" onClick={handleCreateGame}>
+            <div className="CreateGameDiv" onClick={() => handleCreateGame(name)}>
                 <input type="submit" value={"Create Game"}></input>
             </div>
 
@@ -29,7 +39,7 @@ function Menu({ props }) {
                     value={inputId}
                     onChange={handleInputIdChange}
                 />
-                <button onClick={() => handleConnectGame(inputId)}>Connect</button>
+                <button onClick={() => handleConnectGame(inputId, name)}>Connect</button>
             </div>
         </>
     )

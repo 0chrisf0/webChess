@@ -1,7 +1,10 @@
 package com.web.chess.controllers;
 import com.web.chess.ChessBoardGUI;
 import com.web.chess.models.APIRequest;
+import com.web.chess.models.ClickRequest;
+import com.web.chess.models.ClickResponse;
 import com.web.chess.models.ConnectRequest;
+import com.web.chess.models.CreateRequest;
 import com.web.chess.services.BoardToJSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +33,6 @@ public class ChessController {
 
 	@PostMapping("/FEN")
 	public String fen(@RequestBody APIRequest request) {
-		logger.info("FENFENFENFNENFEFN");
 		ChessBoardGUI gui = gameService.getBoard(request.gameId);
 		String inputFEN = request.data;
 		// Call server-side functions for the effects and send back the modified state.
@@ -38,7 +40,6 @@ public class ChessController {
 			gui.setupBoard(inputFEN);
 		} catch (Exception e) {
 			// TODO add websocket response?
-			logger.info("ERROROEROERROEOR");
 		}
 		messagingTemplate.convertAndSend("/topic/game/" + request.gameId, BoardToJSON.clickToJSON(gui.chessBoardSquares, gui.currentGamestate) );
 		return "SUCCESS";
@@ -54,29 +55,33 @@ public class ChessController {
 	}
 
 	@PostMapping("/click")
-	public String click(@RequestBody APIRequest request) {
+	public String click(@RequestBody ClickRequest request) {
 		ChessBoardGUI gui = gameService.getBoard(request.gameId);
-		String pos = request.data;
+		String pos = request.position;
 		int row = Character.getNumericValue(pos.charAt(0));
 		int col = Character.getNumericValue(pos.charAt(1));
-		gui.buttonPress(row, col);
+		gui.buttonPress(row, col, request.color);
 		messagingTemplate.convertAndSend("/topic/game/" + request.gameId, BoardToJSON.clickToJSON(gui.chessBoardSquares, gui.currentGamestate) );
 		return "SUCCESS";
 	}
 
 	@PostMapping("/create")
-	public int create(@RequestBody Player player) {
-		return gameService.createGame();
+	public CreateRequest create(@RequestBody Player player) {
+		return new CreateRequest(player, gameService);
 	}
 
 	@PostMapping("/connect")
-	public ResponseEntity<String> connect(@RequestParam String gameId) {
+	public ResponseEntity<ClickResponse> connect(@RequestBody ConnectRequest request) {
+		ChessBoardGUI gui;
+		String gameId = request.gameId;
+		Player player2 = request.player;
 		try {
-			gameService.connect(gameId);
+			gameService.connect(gameId, player2);
+			gui = gameService.getBoard(request.gameId);
 		} catch (Exception exception) {
-			return new ResponseEntity<String>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new ClickResponse(), HttpStatus.BAD_REQUEST);
 		}
 
-		return new ResponseEntity<String>("Succesful connection", HttpStatus.OK);
+		return new ResponseEntity<>(BoardToJSON.clickToJSON(gui.chessBoardSquares, gui.currentGamestate), HttpStatus.OK);
 	}
 }

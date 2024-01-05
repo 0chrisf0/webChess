@@ -1,6 +1,7 @@
 package com.web.chess.services;
 
 import com.web.chess.ChessBoardGUI;
+import com.web.chess.models.Player;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
@@ -26,19 +27,20 @@ public class GameService {
         return gameMap.get(gameId);
     }
     
-    public int createGame () {
+    public int createGame (Player player) {
 
-        ChessBoardGUI game = new ChessBoardGUI();
+        ChessBoardGUI game = new ChessBoardGUI(player);
         counter++;
         gameMap.put(Integer.toString(counter), game);
         return counter;
     }
 
-    public void connect (String gameId) throws InvalidParameterException {
+    public void connect (String gameId, Player player) throws InvalidParameterException {
         ChessBoardGUI game = gameMap.get(gameId);
         if (game == null) {
             throw new InvalidParameterException("Game with " + gameId + " does not exist");
         }
         // rest of the logic
+        game.setPlayer2(player);
     }
 }

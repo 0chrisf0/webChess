@@ -1,10 +1,21 @@
 package com.web.chess;
+import com.web.chess.models.Player;
 import java.awt.*;
 import java.util.HashSet;
 
 
 
 public class ChessBoardGUI {
+
+    /**
+     * Player 1
+     */
+    private Player player1;
+
+    /**
+     * Player 2
+     */
+    private Player player2;
 
     /**
      * chessBoardSquares is a 2D array representing all the squares of the chessboard.
@@ -43,11 +54,17 @@ public class ChessBoardGUI {
      */
     private HashSet<String> currentLegalMoves = new HashSet<>();
 
-
+    /**
+     * Sets player2.
+     */
+    public void setPlayer2(Player player) {
+        player2 = player;
+    }
     /**
      * Constructor for ChessBoardGUI. Makes use of initializeGui().
      */
-    public ChessBoardGUI() {
+    public ChessBoardGUI(Player player) {
+        player1 = player;
         initializeGui();
     }
 
@@ -130,10 +147,19 @@ public class ChessBoardGUI {
 
     }
 
+    private boolean colorTurnMatch (gamestate state, int color) {
+        return ((state == gamestate.WHITE || state == gamestate.WHITE_SELECT) && color == -1) ||
+                ((state == gamestate.BLACK || state == gamestate.BLACK_SELECT) && color == 1);
+    }
+
     /**
      * Handles the movement of the pieces on the GUI. Ensures that moves are legal.
      */
-    public void buttonPress(int row, int column) {
+    public void buttonPress(int row, int column, int color) {
+        if (!colorTurnMatch(currentGamestate, color)) {
+            return;
+        }
+
         switch (currentGamestate) {
             case WHITE,BLACK:
                 if (currentGamestate == gamestate.WHITE && chessBoardSquares[row][column].getColor() == -1) {

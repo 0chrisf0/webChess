@@ -37,22 +37,34 @@ const App = () => {
     setGameStart(false)
   }
 
-  const handleCreateGame = async () => {
+  const handleCreateGame = async (name) => {
     stompClient.activate();
     const response = await axios.post(`/api/create`, {
-    name: 'PLACEHOLDER',
+    name,
     id: 'PLACEHOLDER',
     color: -1});
-    stompClient.gameId = response.data;
+    let data = response.data;
+    stompClient.gameId = data.gameId;
+    stompClient.playerColor = -1;
+    stompClient.initialState = data.state;
     startGame();
   }
 
-  const handleConnectGame = async (inputID) => {
-    console.log("CONNECTING: " + inputID)
-    axios.post(`/api/connect?gameId=${inputID}`)
+  const handleConnectGame = async (inputID, name) => {
+    console.log("CONNECTING: " + inputID + " " + name)
+    axios.post(`/api/connect`, {
+      player : {
+        name,
+        id : "placeholder",
+        color : 1
+      },
+      gameId : inputID
+    })
         .then((response) => {
           stompClient.activate();
           stompClient.gameId = inputID;
+          stompClient.playerColor = 1;
+          stompClient.initialState = response.data
           startGame();
         } )
         .catch((error) => console.log(error.message))
