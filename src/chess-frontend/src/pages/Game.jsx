@@ -114,7 +114,7 @@ const Game = ({props}) => {
     }
 
 
-    const menuProps = {gamestate, newgame: handleNewGameClick, startgame:handleStartGameClick}
+    const menuProps = {gamestate, newgame: handleNewGameClick, startgame:handleStartGameClick, gameId: stompClient.gameId}
     const chessboard = {handleClick, boardstate, highlights}
 
     return (
