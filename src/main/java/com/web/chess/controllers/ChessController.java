@@ -60,6 +60,9 @@ public class ChessController {
 		String pos = request.position;
 		int row = Character.getNumericValue(pos.charAt(0));
 		int col = Character.getNumericValue(pos.charAt(1));
+		if (request.color == 1) {
+			row = -row + 7;
+		}
 		gui.buttonPress(row, col, request.color);
 		messagingTemplate.convertAndSend("/topic/game/" + request.gameId, BoardToJSON.clickToJSON(gui.chessBoardSquares, gui.currentGamestate) );
 		return "SUCCESS";
