@@ -7,16 +7,18 @@ import { Client } from '@stomp/stompjs';
 
 
 const Game = ({props}) => {
-    const {endGame, gameID, stompClient} = props;
+    const {endGame, stompClient} = props;
 
     useEffect (() => {setTimeout(function() {
-        console.log(gameID);
-        stompClient.subscribe("/topic/game", function (response) {
+        console.log("SUBSCRIBING: /topic/game/" + stompClient.gameId);
+
+        stompClient.subscribe("/topic/game/" + stompClient.gameId, function (response) {
             let data = JSON.parse(response.body);
             setBoardstate(data.boardstate)
             setHighlights(data.highlights)
             setGamestate(data.gamestate)
         })
+
     }, 1000)}, [])
 
 
@@ -47,8 +49,10 @@ const Game = ({props}) => {
 
     const handleStartGameClick = async () => {
         try {
-            // Make an HTTP GET request to the server
-            const response = await axios.get(`/api/start`)
+            await axios.post(`/api/start`, {
+                data : "",
+                gameId : stompClient.gameId
+            })
 
         } catch (error) {
             console.error('Error fetching data:', error.message)
@@ -61,7 +65,10 @@ const Game = ({props}) => {
             setGamestate("Inactive")
             try {
                 // Make an HTTP GET request to the server
-                const response = await axios.get(`/api/FEN?inputFEN=${encodeURIComponent(inputFEN)}`)
+                await axios.post(`/api/FEN`, {
+                    data : inputFEN,
+                    gameId : stompClient.gameId
+                })
 
 
             } catch (error) {
@@ -75,7 +82,10 @@ const Game = ({props}) => {
             // Make an HTTP GET request to the server
             // What the server needs: the position of the click
             const position = row.toString() + col.toString()
-            const response = await axios.get(`/api/click?pos=${position}`)
+            await axios.post(`/api/click`, {
+                data : position,
+                gameId : stompClient.gameId
+            })
 
 
         } catch (error) {

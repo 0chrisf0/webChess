@@ -29,7 +29,6 @@ stompClient.onWebSocketError = (error) => {
 
 const App = () => {
   const [gameStart, setGameStart] = useState(false)
-  const [gameID, setID] = useState('')
 
   const startGame = () => {
     setGameStart(true)
@@ -44,16 +43,22 @@ const App = () => {
     name: 'PLACEHOLDER',
     id: 'PLACEHOLDER',
     color: -1});
-    setID(response.data)
+    stompClient.gameId = response.data;
     startGame();
   }
 
   const handleConnectGame = async (inputID) => {
     console.log("CONNECTING: " + inputID)
-
+    axios.post(`/api/connect?gameId=${inputID}`)
+        .then((response) => {
+          stompClient.activate();
+          stompClient.gameId = inputID;
+          startGame();
+        } )
+        .catch((error) => console.log(error.message))
   }
 
-  const gameProps={endGame,gameID, stompClient}
+  const gameProps={endGame, stompClient}
   const menuProps={startGame, handleCreateGame, handleConnectGame, stompClient}
 
   return (
